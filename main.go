@@ -79,16 +79,19 @@ var eventQueryUrl =
 		"contractlogs/contract/TPt8DTDBZYfJ9fuyRjdWJr4PP68tRfptLG",
 		"contractlogs/total",
 	}
+var eventQueryServiceIp = []string {
+	"47.254.69.13:8080",
+	"47.254.84.58:8080",
+	"api.tronex.io",
+}
 
 func main() {
-
 	logs.Info("start monitor")
 	go start()
 	go report()
 	go change()
 	go httpReport()
 	go maxBlockReportAlert()
-
 	defer influxdb.Client.C.Close()
 
 	beego.Run()
@@ -102,6 +105,15 @@ func maxBlockReportAlert()  {
 	c.Start()
 }
 
+func monitorEventQuery(getNowBlockAlert *alerts.GetNowBlockAlert) {
+	tronStackAlert := new(alerts.TronStackAlert)
+	getNowBlockAlert.ReportEventQuery(httpevent, eventQueryUrl)
+	for _, ip := range eventQueryServiceIp {
+		tronStackAlert.CheckHeathStatus(ip)
+	}
+
+}
+
 func httpReport() {
 	c := cron.New()
 	c.AddFunc("0,20,40 * * * * *", func() {
@@ -109,7 +121,7 @@ func httpReport() {
 		getNowBlockAlert.Load()
 		//getNowBlockAlert.ReportSRDelay()
 		getNowBlockAlert.ReportDelayEX(httpex, fullUrl, solidityUrl)
-		getNowBlockAlert.ReportEventQuery(httpevent, eventQueryUrl)
+		monitorEventQuery(getNowBlockAlert)
 		getNowBlockAlert.ReportDelay(fullUrl, solidityUrl)
 		//getNowBlockAlert.ReportEventQuery(httpTestEvent, eventQueryUrl)
 	})
