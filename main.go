@@ -117,7 +117,7 @@ func httpReport() {
 }
 
 func callWhoOnDuty() string {
-	DUTY := []string{"吴彬", "岳瑞鹏", "姜阳阳", "张思聪", "吴斌", "梁志彦", "孙昊宇"}
+	DUTY := []string{"吴彬", "岳瑞鹏", "张思聪", "吴斌", "梁志彦", "张博", "成特学"}
 	who  := (time.Now().Unix() - 86400 * 4) / 86400 / 7 % int64(len(DUTY))
 	return DUTY[who]
 }

@@ -8,7 +8,7 @@ import (
 	"errors"
 )
 
-var webhookUrl string = "https://hooks.slack.com/services/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"
+var webhookUrl string = "https://hooks.slack.com/services/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"
 
 type SlackRequestBody struct {
 	Text string `json:"text"`

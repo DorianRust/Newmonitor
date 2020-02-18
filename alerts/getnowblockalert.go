@@ -250,8 +250,8 @@ func (g *GetNowBlockAlert) getNodeBlockNum(ip string, port int,
 }
 
 func callWhoUpdateAnomaly() {
-	DUTY := []string{"吴彬", "岳瑞鹏", "姜阳阳", "张思聪", "吴斌", "梁志彦", "孙昊宇"}
-	Phone := []string{"18903830819", "13311527723", "13810109462", "13466613212", "18515212681", "15256073545", "15901009909"}
+	DUTY := []string{"吴彬", "岳瑞鹏", "张思聪", "吴斌", "梁志彦", "张博", "成特学"}
+	Phone := []string{"18903830819", "13311527723", "13466613212", "18515212681", "15256073545", "18567720695", "18511911301"}
 	who  := (time.Now().Unix() - 86400 * 4) / 86400 / 7 % int64(len(DUTY))
 	callUpdateAnomaly(Phone[who])
 }
@@ -486,8 +486,8 @@ func dingdingAlertAnomaly(httpUrl string, nowElapsed float64) {
 }
 
 func callWhoAPIAnomaly(endpoint string) {
-	DUTY := []string{"吴彬", "岳瑞鹏", "姜阳阳", "张思聪", "吴斌", "梁志彦", "孙昊宇"}
-	Phone := []string{"18903830819", "13311527723", "13810109462", "13466613212", "18515212681", "15256073545", "15901009909"}
+	DUTY := []string{"吴彬", "岳瑞鹏", "张思聪", "吴斌", "梁志彦", "张博", "成特学"}
+	Phone := []string{"18903830819", "13311527723", "13466613212", "18515212681", "15256073545", "18567720695", "18511911301"}
 	who  := (time.Now().Unix() - 86400 * 4) / 86400 / 7 % int64(len(DUTY))
 	callAPIAnomaly(endpoint, Phone[who])
 }
