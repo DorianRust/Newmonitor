@@ -28,12 +28,12 @@ func Get(httpUrl string) float64 {
 	return elapsed
 }
 
-func CheckHeathcheck(httpUrl string) bool {
+func CheckHeathcheck(httpUrl string) string {
 	result, err := http.Get(httpUrl)
 
 	if err != nil {
 		fmt.Print("error", err)
-		return false
+		return "Down"
 	}
 	defer func(result  *http.Response) {
 		if (result != nil){
@@ -45,7 +45,7 @@ func CheckHeathcheck(httpUrl string) bool {
 	var content string
 	content = fmt.Sprintf("%s", s)     //在返回页面中显示内容。
 	if (len(content) != 0 && content == "OK"){
-		return true
+		return "OK"
 	}
-	return false
+	return  "Down"
 }
