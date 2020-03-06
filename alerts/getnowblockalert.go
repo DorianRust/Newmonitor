@@ -18,6 +18,7 @@ import (
 // ms: 5min
 const Internal5min int64 = 1000 * 60 * 5
 const Internal1s float64 = 1
+const Internal1s_2 float64 = 2
 const InternalEvent float64  = 3
 var lastBlockNum =  map[string]int64{}
 type GetNowBlockAlert struct {
@@ -422,10 +423,20 @@ func (g *GetNowBlockAlert)ReportEventQuery(event string, eventQueryUrl []string)
 		influxdb.Client.WriteByTime("api_report_eventQuery", httpMap, httpFields, time.Now())
 
 		if (nowElapsed > InternalEvent) {
-			retryGet(httpUrl, endpoint)
+			retryGetEvent(httpUrl, endpoint)
 		}
 	}
 }
+
+func retryGetEvent(httpUrl, endpoint string) float64{
+	nowElapsed := function.Get(httpUrl)
+	if (nowElapsed > InternalEvent) {
+		callWhoAPIAnomaly(endpoint)
+		dingdingAlertAnomaly(httpUrl, nowElapsed)
+	}
+	return nowElapsed
+}
+
 
 func retryGet(httpUrl, endpoint string) float64{
 	nowElapsed := function.Get(httpUrl)

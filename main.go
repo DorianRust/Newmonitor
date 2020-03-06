@@ -12,6 +12,7 @@ import (
 	_ "github.com/sasaxie/monitor/routers"
 	"time"
 	"github.com/sasaxie/monitor/slack"
+	"github.com/sasaxie/monitor/tronstack"
 )
 
 var httpex = "https://httpapi.tronex.io/"
@@ -69,7 +70,6 @@ var eventQueryUrl =
 		"transfers",
 		"events",
 		"events/total",
-		"events/confirmed",
 		"events/timestamp",
 		"events/TPt8DTDBZYfJ9fuyRjdWJr4PP68tRfptLG",
 		"events/transaction/381df46287c296937582863269836dba8b6fc2098247fd86c2467ec7395ea854",
@@ -80,9 +80,15 @@ var eventQueryUrl =
 		"contractlogs/total",
 	}
 var eventQueryServiceIp = []string {
-	"47.254.69.13:8080",
-	"47.254.84.58:8080",
-	"api.tronex.io",
+	"https://api.tronex.io",
+	"http://47.254.69.13:8080",
+	"http://47.254.84.58:8080",
+}
+
+var tronStackIp = []string {
+	"https://api.tronstack.io",
+	"http://18.221.34.0:8090",
+	"http://52.15.93.92:8090",
 }
 
 func main() {
@@ -106,14 +112,16 @@ func maxBlockReportAlert()  {
 }
 
 func monitorEventQuery(getNowBlockAlert *alerts.GetNowBlockAlert) {
-	tronStackAlert := new(alerts.TronStackAlert)
+	tronStackAlert := new(tronstack.TronStackAlert)
 	getNowBlockAlert.ReportEventQuery(httpevent, eventQueryUrl)
 	for _, ip := range eventQueryServiceIp {
-		tronStackAlert.CheckHeathStatus(ip)
+		tronStackAlert.CheckEventQueryStatus(ip)
 	}
 
-	//Todo
-
+	for _, ip := range tronStackIp {
+		tronStackAlert.CheckTronStackStatus(ip)
+	}
+	tronStackAlert.CheckTronStackResponse(eventQueryServiceIp[0], eventQueryServiceIp[1:])
 }
 
 func httpReport() {
